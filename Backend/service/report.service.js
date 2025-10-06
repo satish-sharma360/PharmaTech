@@ -1,6 +1,6 @@
-import Medicine from "../models/medicine.model";
-import Report from "../models/report.model";
-import Sale from "../models/Sale.model";
+import Medicine from "../models/Medicine.model.js";
+import Report from "../models/Report.model.js";
+import Sale from "../models/Sale.model.js";
 
 class ReportService {
     async generateDailySalesReport(userId) {

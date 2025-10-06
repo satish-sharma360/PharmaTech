@@ -1,5 +1,5 @@
-import Inventory from "../models/Inventory.model";
-import Medicine from "../models/medicine.model";
+import Inventory from "../models/Inventory.model.js";
+import Medicine from "../models/Medicine.model.js";
 
 class InventoryService{
     async addInventory(inventoryData,userId){

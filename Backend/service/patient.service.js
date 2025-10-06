@@ -1,4 +1,4 @@
-import Patient from "../models/patient.model";
+import Patient from "../models/Patient.model.js";
 
 class PatientService {
     async createPatients(patientdata) {

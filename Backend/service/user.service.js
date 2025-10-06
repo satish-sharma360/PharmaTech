@@ -1,5 +1,5 @@
-import User from "../models/user.model"
-import authService from "./auth.service";
+import User from "../models/User.model.js"
+import authService from "./auth.service.js";
 
 
 class UserService {

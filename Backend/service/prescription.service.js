@@ -1,4 +1,4 @@
-import Prescription from "../models/prescription.model";
+import Prescription from "../models/Prescription.model.js";
 
 class PrescriptionService {
     async generatePrescriptionNumber() {

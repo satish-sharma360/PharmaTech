@@ -1,6 +1,6 @@
-import Inventory from "../models/Inventory.model";
-import Medicine from "../models/medicine.model";
-import Sale from "../models/Sale.model";
+import Inventory from "../models/Inventory.model.js";
+import Medicine from "../models/Medicine.model.js";
+import Sale from "../models/Sale.model.js";
 
 class SaleService {
     async generateInvoiceNumber() {
