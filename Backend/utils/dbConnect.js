@@ -7,7 +7,7 @@ class Database {
     }
     async connect() {
         try {
-            await mongoose.connect(this.dbURI + 'pharma-Management-System')
+            await mongoose.connect(this.dbURI + '/pharma-Management-System')
             console.log(`✅ MongoDB Connected Successfully`)
         } catch (error) {
             console.error("❌ MongoDB Connection Failed:", error.message);

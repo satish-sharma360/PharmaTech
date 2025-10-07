@@ -18,8 +18,8 @@ class CloudinaryUtil {
             const response = await cloudinary.uploader.upload(localFilePath, {
                 resource_type: 'auto'
             })
-            console.log("Cloudinary Upload Success:", response.secure_url)
-            return response
+            fs.unlinkSync(localFilePath)
+            return response.secure_url
         } catch (error) {
             console.error("Cloudinary Upload Error:", error.message);
             fs.unlinkSync(localFilePath); // cleanup temp file

@@ -1,4 +1,5 @@
 import medicineService from "../service/medicine.service.js"
+import cloudinary from "../utils/cloudinary.js"
 
 class MedicineController {
     async createMedicine(req, res) {
@@ -8,9 +9,12 @@ class MedicineController {
                 addedBy: req.user.userId
             }
             if (req.file) {
+                const result = await cloudinary.upload(req.file.path)
+                console.log(result)
                 medicinedata.image = {
-                    url: req.file.path,
-                    publicId: req.file.filename
+                    url: result,
+                    publicId: req.file.filename,
+
                 }
             }
             const medicine = await medicineService.createMedicine(medicinedata)

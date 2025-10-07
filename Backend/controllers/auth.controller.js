@@ -5,6 +5,15 @@ import userService from "../service/user.service.js";
 class AuthController {
     async register(req, res) {
         try {
+            const { name, email, password, role, phone, address } = req.body;
+
+            // 🔹 Basic validation
+            if (!name || !email || !password) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Name, email, and password are required."
+                });
+            }
             const user = await userService.createUser(req.body)
             res.status(201).json({
                 success: true,
@@ -82,6 +91,7 @@ class AuthController {
     async refreshToken(req, res) {
         try {
             const { refreshToken } = req.body;
+            
 
             if (!refreshToken) {
                 return res.status(400).json({
@@ -92,7 +102,7 @@ class AuthController {
 
             const decoded = tokenService.verifyRefreshToken(refreshToken)
 
-            const user = await userService.getUserById(decoded.userId);
+            const user = await userService.getUserById(decoded._id);
 
             const userWithToken = await userService.getUserByEmail(user.email)
             if (userWithToken.refreshToken !== refreshToken) {
@@ -141,7 +151,7 @@ class AuthController {
 
     async getCurrentUser(req, res) {
         try {
-            const user = userService.getUserById(req.user.userId);
+            const user = await userService.getUserById(req.user._id);
             res.status(200).json({
                 success: true,
                 data: user
@@ -153,6 +163,6 @@ class AuthController {
             });
         }
     }
-} 
+}
 
 export default new AuthController()

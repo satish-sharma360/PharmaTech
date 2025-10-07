@@ -3,7 +3,17 @@ import userService from "../service/user.service.js"
 class UserController {
     async CreateUser(req, res) {
         try {
-            const user = await userService.createUser(req.body);
+            const { name, email, password, role, phone, address } = req.body;
+
+            // Validation
+            if (!name || !email || !password) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Name, email, and password are required fields."
+                });
+            }
+
+            const user = await userService.createUser({ name, email, password, role, phone, address });
             res.status(201).json({
                 success: true,
                 message: 'User created successfully',
@@ -24,9 +34,11 @@ class UserController {
                 filter.role = role;
             }
             if (isActive !== undefined) {
-                filter.isActive = isActive === 'true'
+                filter.isActive = isActive.trim().toLowerCase() === 'true'
             }
+
             const users = await userService.getAllUser(filter)
+            
             res.status(200).json({
                 success: true,
                 count: users.length,
