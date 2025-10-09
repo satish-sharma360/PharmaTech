@@ -30,6 +30,7 @@ const Login = () => {
             const response = await login(formData)
             if (response.success) {
                 alert('login Successfull')
+                navigate('/dashboard')
             }
         } catch (error) {
             setError(error.response?.data?.message || 'Login failed. please try again')
@@ -105,25 +106,11 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
-              />
-              <span className="ml-2 text-sm text-gray-600">Remember me</span>
-            </label>
-            <a href="#" className="text-sm text-primary hover:underline">
-              Forgot password?
-            </a>
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
-            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+            // disabled={loading}
+            className="w-full bg-[#3b82f6] text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
@@ -135,7 +122,7 @@ const Login = () => {
             Demo Credentials:
           </p>
           <p className="text-xs text-gray-600">
-            Admin: admin@pharmacy.com / admin123
+            Admin: admin@example.com / Admin@123
           </p>
           <p className="text-xs text-gray-600">
             Pharmacist: pharmacist@pharmacy.com / pharma123

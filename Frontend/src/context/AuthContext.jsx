@@ -18,7 +18,7 @@ export const AuthProvider = ({children}) =>{
         console.log("Check Auth User" , storedUser)
         console.log("Check Auth Token" , token)
         if (storedUser && token) {
-            setUser(JSON.stringify(storedUser))
+            setUser(JSON.parse(storedUser))
             setIsAuthenticated(true)
         }
         setLoading(false)
@@ -28,8 +28,9 @@ export const AuthProvider = ({children}) =>{
         try {
             const response = await authApi.login(credentials)
             console.log("Auth Login" ,response)
-            if (response.data.success) {
+            if (response.success) {
                 setUser(response.data.user)
+                console.log("User is" ,user)
                 setIsAuthenticated(true)
                 return response
             }

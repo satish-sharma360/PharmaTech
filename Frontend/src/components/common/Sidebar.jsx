@@ -1,37 +1,23 @@
 import React, { useState } from "react";
 
 import { NavLink } from "react-router-dom";
-import {DollarSign, FileBarChart, LayoutGrid, Menu, Package, Pill, ShoppingCart, Users, X} from 'lucide-react'
-// import { useAuth } from '../../hooks/useAuth';
 import {
-  FaHome,
-  FaUsers,
-  FaPills,
-  FaUserInjured,
-  FaFileAlt,
-  FaShoppingCart,
-  FaCashRegister,
-  FaBoxes,
-  FaChartBar,
-} from "react-icons/fa";
-// import { ROLES } from '../../utils/constants';
+  DollarSign,
+  FileBarChart,
+  LayoutGrid,
+  Menu,
+  Package,
+  Pill,
+  Users,
+  X,
+} from "lucide-react";
+import { FaUserInjured, FaFileAlt, FaCashRegister } from "react-icons/fa";
+import { userAuth } from "../../hooks/useAuth";
+import { ROLES } from "../../utils/constants";
 
 const Sidebar = () => {
-    const [isOpen, setIsOpen] = useState(true);
-  //   const { user, hasRole } = useAuth();
-  const user = {
-    name: "satish",
-    role: "pharmacist",
-  };
-  const ROLES = {
-    ADMIN: "admin",
-    PHARMACIST: "pharmacist",
-    CASHIER: "cashier",
-  };
-  const hasRole = (roles) => {
-    if (!user) return false;
-    return roles.includes(user.role);
-  };
+  const [isOpen, setIsOpen] = useState(true);
+  const { user, hasRole } = userAuth();
 
   const menuItems = [
     {
@@ -110,24 +96,8 @@ const Sidebar = () => {
       <aside
         className={`${
           isOpen ? "w-64" : "w-20"
-        } bg-white h-screen border-r border-gray-200 flex flex-col justify-between transition-all duration-300 fixed top-0 left-0 z-[1000] pt-16 shadow-sm`}
+        } bg-white h-screen border-r border-gray-200 flex flex-col justify-between transition-all duration-300 pt-16 shadow-sm`}
       >
-        {/* User / Logo Section */}
-        <div className="flex items-center gap-3 p-4 border-b border-gray-100">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-400 text-white rounded-xl flex items-center justify-center font-bold shadow-sm">
-            {user?.name?.[0] || "P"}
-          </div>
-          {isOpen && (
-            <div>
-              <p className="text-sm font-semibold text-gray-800">
-                {user?.name || "Pharma Admin"}
-              </p>
-              <p className="text-xs text-gray-500 capitalize">
-                {user?.role || "Manager"}
-              </p>
-            </div>
-          )}
-        </div>
 
         {/* Menu Items */}
         <nav className="flex flex-col mt-3">

@@ -1,14 +1,14 @@
 import React from "react";
 import { FaBell, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+import { userAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-    const user ={
-        name:"satish",
-        role:'Admin'
-    }
-
+    const {user,logOut} = userAuth()
+    const navigate = useNavigate()
     const handleLogout = async()=>{
-        console.log("hell")
+      await logOut()
+      navigate('/login')
     }
   return (
     <nav className="bg-white shadow-md px-6 py-4">
