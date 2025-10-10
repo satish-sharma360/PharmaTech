@@ -7,12 +7,16 @@ import Table from '../../components/common/Table';
 import Loader from '../../components/common/Loader';
 import SearchBar from '../../components/common/SearchBar';
 import { userAuth } from '../../hooks/useAuth';
+import Modal from '../common/Modal';
+import PatientForm from './PatientForm';
 
 const Patients = () => {
   const { hasRole } = userAuth();
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
   const canModify = hasRole([ROLES.ADMIN, ROLES.PHARMACIST]);
 
@@ -46,6 +50,25 @@ const Patients = () => {
     }
   };
 
+  const handleEdit = (patient) => {
+    setSelectedPatient(patient);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedPatient(null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const handleSuccess = () => {
+    fetchPatients();
+  };
+
   const columns = [
     { header: 'Name', accessor: 'name' },
     { header: 'Age', accessor: 'age' },
@@ -61,12 +84,12 @@ const Patients = () => {
       header: 'Actions',
       render: (row) => (
         <div className="flex space-x-2">
-          <button className="text-green-600 hover:text-green-800">
-            <FaEye />
-          </button>
           {canModify && (
             <>
-              <button className="text-blue-600 hover:text-blue-800">
+              <button
+                onClick={() => handleEdit(row)}
+                className="text-blue-600 hover:text-blue-800"
+              >
                 <FaEdit />
               </button>
               <button
@@ -89,7 +112,10 @@ const Patients = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Patients</h1>
         {canModify && (
-          <button className="btn-primary flex items-center space-x-2">
+          <button
+            onClick={handleAdd}
+            className="btn-primary flex items-center space-x-2"
+          >
             <FaPlus />
             <span>Add Patient</span>
           </button>
@@ -106,6 +132,20 @@ const Patients = () => {
         </div>
         <Table columns={columns} data={patients} />
       </Card>
+
+      {/* Add/Edit Patient Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={selectedPatient ? 'Edit Patient' : 'Add New Patient'}
+        size="large"
+      >
+        <PatientForm
+          patient={selectedPatient}
+          onClose={handleCloseModal}
+          onSuccess={handleSuccess}
+        />
+      </Modal>
     </div>
   );
 };

@@ -4,10 +4,14 @@ import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
 import Card from '../components/common/Card';
 import Table from '../components/common/Table';
 import Loader from '../components/common/Loader';
+import Modal from '../components/common/Modal';
+import UserForm from './UserForm';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -16,7 +20,6 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      // TODO: Connect to your backend
       const response = await userApi.getAllUsers();
       setUsers(response.data);
     } catch (error) {
@@ -29,7 +32,6 @@ const Users = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        // TODO: Connect to your backend
         await userApi.deleteUser(id);
         alert('User deleted successfully');
         fetchUsers();
@@ -61,7 +63,13 @@ const Users = () => {
       header: 'Actions',
       render: (row) => (
         <div className="flex space-x-2">
-          <button className="text-blue-600 hover:text-blue-800">
+          <button
+            onClick={() => {
+              setSelectedUser(row);
+              setIsModalOpen(true);
+            }}
+            className="text-blue-600 hover:text-blue-800"
+          >
             <FaEdit />
           </button>
           <button
@@ -81,7 +89,13 @@ const Users = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
-        <button className="btn-primary flex items-center space-x-2">
+        <button
+          onClick={() => {
+            setSelectedUser(null);
+            setIsModalOpen(true);
+          }}
+          className="btn-primary flex items-center space-x-2"
+        >
           <FaPlus />
           <span>Add User</span>
         </button>
@@ -90,6 +104,25 @@ const Users = () => {
       <Card>
         <Table columns={columns} data={users} />
       </Card>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedUser(null);
+        }}
+        title={selectedUser ? 'Edit User' : 'Add New User'}
+        size="medium"
+      >
+        <UserForm
+          user={selectedUser}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedUser(null);
+          }}
+          onSuccess={fetchUsers}
+        />
+      </Modal>
     </div>
   );
 };

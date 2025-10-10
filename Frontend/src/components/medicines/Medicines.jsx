@@ -8,12 +8,16 @@ import Loader from '../../components/common/Loader';
 import SearchBar from '../../components/common/SearchBar';
 import { formatCurrency, formatDate } from '../../utils/helpers';
 import { userAuth } from '../../hooks/useAuth';
+import Modal from '../common/Modal';
+import MedicineForm from './MedicineForm';
 
 const Medicines = () => {
   const { hasRole } = userAuth();
   const [medicines, setMedicines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMedicine, setSelectedMedicine] = useState(null);
 
   const canModify = hasRole([ROLES.ADMIN, ROLES.PHARMACIST]);
 
@@ -24,10 +28,9 @@ const Medicines = () => {
   const fetchMedicines = async () => {
     try {
       setLoading(true);
-      // TODO: Connect to your backend - Replace with actual URL
+      // TODO: Connect to your backend
       const response = await medicineApi.getMedicines();
       setMedicines(response.data);
-      console.log(response.data)
     } catch (error) {
       console.error('Error fetching medicines:', error);
       alert('Failed to fetch medicines');
@@ -50,6 +53,25 @@ const Medicines = () => {
     }
   };
 
+  const handleEdit = (medicine) => {
+    setSelectedMedicine(medicine);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedMedicine(null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMedicine(null);
+  };
+
+  const handleSuccess = () => {
+    fetchMedicines();
+  };
+
   const columns = [
     { header: 'Name', accessor: 'name' },
     { header: 'Category', accessor: 'category' },
@@ -67,7 +89,10 @@ const Medicines = () => {
       header: 'Actions',
       render: (row) => canModify && (
         <div className="flex space-x-2">
-          <button className="text-blue-600 hover:text-blue-800">
+          <button
+            onClick={() => handleEdit(row)}
+            className="text-blue-600 hover:text-blue-800"
+          >
             <FaEdit />
           </button>
           <button
@@ -88,7 +113,10 @@ const Medicines = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Medicines</h1>
         {canModify && (
-          <button className="btn-primary flex items-center space-x-2">
+          <button
+            onClick={handleAdd}
+            className="btn-primary flex items-center space-x-2"
+          >
             <FaPlus />
             <span>Add Medicine</span>
           </button>
@@ -105,6 +133,20 @@ const Medicines = () => {
         </div>
         <Table columns={columns} data={medicines} />
       </Card>
+
+      {/* Add/Edit Medicine Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title={selectedMedicine ? 'Edit Medicine' : 'Add New Medicine'}
+        size="large"
+      >
+        <MedicineForm
+          medicine={selectedMedicine}
+          onClose={handleCloseModal}
+          onSuccess={handleSuccess}
+        />
+      </Modal>
     </div>
   );
 };
